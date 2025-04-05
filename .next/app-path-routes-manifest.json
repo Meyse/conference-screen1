@@ -1,0 +1,6 @@
+{
+  "/api/dashboard-metrics/route": "/api/dashboard-metrics",
+  "/favicon.ico/route": "/favicon.ico",
+  "/_not-found/page": "/_not-found",
+  "/page": "/"
+}
