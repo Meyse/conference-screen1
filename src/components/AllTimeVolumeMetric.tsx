@@ -19,7 +19,7 @@ interface AllTimeVolumeMetricProps {
 export const AllTimeVolumeMetric: React.FC<AllTimeVolumeMetricProps> = ({
   title = "All-time on-chain DeFi volume",
   value = "$500M+",
-  subtitle = "Processed through the protocol"
+  subtitle = "MEV-free"
 }) => {
   // Animation variants
   const containerVariants = {

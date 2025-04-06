@@ -15,7 +15,7 @@ interface VolumeMetricsProps {
 }
 
 export const VolumeMetrics: React.FC<VolumeMetricsProps> = ({
-  title = "Trading Volume"
+  title = "Live DeFi Volume"
 }) => {
   const [metrics, setMetrics] = useState({
     volume24h: "$0",

@@ -16,8 +16,8 @@ interface TVLMetricProps {
 }
 
 export const TVLMetric: React.FC<TVLMetricProps> = ({
-  title = "TVL",
-  subtitle = "Total Value Locked"
+  title = "Total Value of Liquidity",
+  subtitle = "TVL"
 }) => {
   // State for TVL data
   const [tvlValue, setTvlValue] = useState("$0");

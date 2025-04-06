@@ -3,6 +3,7 @@
  * 
  * A component for displaying the number of chains in the ecosystem
  * with eye-catching animations for conference display.
+ * Updated to show additional metrics like currencies, liquidity pools and tokens.
  */
 
 'use client';
@@ -13,12 +14,18 @@ import { motion } from 'framer-motion';
 interface ChainsMetricProps {
   title: string;
   count: string;
+  additionalText?: string;
 }
 
 export const ChainsMetric: React.FC<ChainsMetricProps> = ({
-  title = "Chains in the ecosystem",
-  count = "4"
+  title = "Chains & currencies",
+  count = "4",
+  additionalText
 }) => {
+  // Extract the numeric part from the additionalText if it exists
+  const currencyCount = additionalText ? additionalText.split(' ')[0] : "";
+  const remainingText = additionalText ? additionalText.split(' ').slice(1).join(' ') : "";
+  
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -69,15 +76,30 @@ export const ChainsMetric: React.FC<ChainsMetricProps> = ({
         {title}
       </motion.h2>
       
-      {/* Count with flashy effects */}
-      <motion.div 
+      {/* Metric Display Container */}
+      <motion.div
         variants={itemVariants}
-        className="chain-count-container"
+        className="metrics-container"
       >
-        <div className="mega-value-container">
-          <div className="mega-value-base">{count}</div>
-          <div className="mega-value-shine">{count}</div>
+        {/* Chains Count */}
+        <div className="metric-item">
+          <div className="mega-value-container">
+            <div className="mega-value-base">{count}</div>
+            <div className="mega-value-shine">{count}</div>
+          </div>
+          <div className="metric-label">Chains</div>
         </div>
+        
+        {/* Currency Count - Only show if additionalText exists */}
+        {additionalText && (
+          <div className="metric-item">
+            <div className="mega-value-container">
+              <div className="mega-value-base currency-value">{currencyCount}</div>
+              <div className="mega-value-shine">{currencyCount}</div>
+            </div>
+            <div className="metric-label">{remainingText}</div>
+          </div>
+        )}
       </motion.div>
       
       {/* Connected chains visual indicator */}
@@ -99,13 +121,32 @@ export const ChainsMetric: React.FC<ChainsMetricProps> = ({
       
       {/* Styles */}
       <style jsx global>{`
-        .chain-count-container {
+        .metrics-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: clamp(8rem, 20vw, 16rem);
           margin-bottom: 2rem;
+          flex-wrap: wrap;
+        }
+        
+        .metric-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .metric-label {
+          font-size: clamp(1.2rem, 3vw, 2.2rem);
+          font-weight: bold;
+          margin-top: 1rem;
+          color: white;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
         
         .mega-value-container {
           position: relative;
-          font-size: clamp(6rem, 20vw, 18rem);
+          font-size: clamp(5rem, 15vw, 15rem);
           font-weight: 900;
           line-height: 1;
           display: inline-block;
@@ -117,11 +158,20 @@ export const ChainsMetric: React.FC<ChainsMetricProps> = ({
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-fill-color: transparent;
           animation: gradientMove 5s ease-in-out infinite;
           filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.5));
           position: relative;
           z-index: 1;
+        }
+        
+        .mega-value-base.currency-value {
+          background: linear-gradient(90deg, #3b82f6, #ffffff, #10b981);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradientMove 5s ease-in-out infinite;
+          filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.5));
         }
         
         .mega-value-shine {

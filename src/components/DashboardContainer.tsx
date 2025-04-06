@@ -17,11 +17,12 @@ import { BridgedAssets } from './BridgedAssets';
 import { ChainsMetric } from './ChainsMetric';
 import { TVLMetric } from './TVLMetric';
 import { AllTimeVolumeMetric } from './AllTimeVolumeMetric';
+import { PromoScreen } from './PromoScreen';
 import { 
   volumeMetrics, 
-  bridgedAssets, 
   chainsMetrics,
-  allTimeVolumeMetrics
+  allTimeVolumeMetrics,
+  promoScreenData
 } from '../data/mockData';
 import { AnimatedBackground } from './AnimatedBackground';
 import { FullscreenHandler } from './FullscreenButton';
@@ -51,13 +52,16 @@ export const DashboardContainer: React.FC = () => {
         return <AllTimeVolumeMetric key={`screen-${currentIndex}-all-time-volume`} {...allTimeVolumeMetrics} />;
       
       case 'bridged-assets':
-        return <BridgedAssets key={`screen-${currentIndex}-bridged-assets`} {...bridgedAssets} />;
+        return <BridgedAssets key={`screen-${currentIndex}-bridged-assets`} title={currentScreen.title} />;
       
       case 'volume-metrics':
         return <VolumeMetrics key={`screen-${currentIndex}-volume-metrics`} {...volumeMetrics} />;
         
       case 'chains-ecosystem':
         return <ChainsMetric key={`screen-${currentIndex}-chains-ecosystem`} {...chainsMetrics} />;
+        
+      case 'promo-event':
+        return <PromoScreen key={`screen-${currentIndex}-promo-event`} {...promoScreenData} />;
         
       default:
         // For standard metrics, render the MegaMetric component

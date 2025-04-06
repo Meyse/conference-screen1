@@ -2,5 +2,6 @@
   "/api/dashboard-metrics/route": "/api/dashboard-metrics",
   "/favicon.ico/route": "/favicon.ico",
   "/_not-found/page": "/_not-found",
+  "/api/bridged-assets/route": "/api/bridged-assets",
   "/page": "/"
 }
