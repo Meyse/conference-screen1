@@ -2,62 +2,28 @@
  * VolumeMetrics.tsx
  * 
  * A component for displaying volume metrics across different time periods (24H/7D/30D)
- * with the 24H volume being the most prominent. Fetches real-time data from the dashboard-metrics API.
+ * with the 24H volume being the most prominent.
+ * Updated to use static values.
  */
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
 interface VolumeMetricsProps {
-  title: string;
+  title?: string;
+  volume24h?: string;
+  volume7d?: string;
+  volume30d?: string;
 }
 
 export const VolumeMetrics: React.FC<VolumeMetricsProps> = ({
-  title = "Live DeFi Volume"
+  title = "Live DeFi Volume",
+  volume24h = "$1.1M",
+  volume7d = "$9.5M",
+  volume30d = "$34.3M"
 }) => {
-  const [metrics, setMetrics] = useState({
-    volume24h: "$0",
-    volume7d: "$0",
-    volume30d: "$0"
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/dashboard-metrics');
-        
-        if (!response.ok) {
-          throw new Error(`Failed to fetch metrics: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        setMetrics({
-          volume24h: data.metrics['total-volume-24h'] || "$0",
-          volume7d: data.metrics['total-volume-7d'] || "$0",
-          volume30d: data.metrics['total-volume-30d'] || "$0"
-        });
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching metrics:', err);
-        setError('Failed to load metrics data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMetrics();
-    
-    // Optional: Set up polling to refresh data periodically
-    const intervalId = setInterval(fetchMetrics, 5 * 60 * 1000); // Refresh every 5 minutes
-    
-    return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
 
   // Animation variants
   const containerVariants = {
@@ -76,38 +42,6 @@ export const VolumeMetrics: React.FC<VolumeMetricsProps> = ({
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
   };
-  
-  // Show loading state
-  if (loading && !metrics.volume24h) {
-    return (
-      <div style={{ 
-        color: 'white', 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        height: '100%',
-        fontSize: '1.5rem'
-      }}>
-        Loading metrics...
-      </div>
-    );
-  }
-
-  // Show error state
-  if (error) {
-    return (
-      <div style={{ 
-        color: 'white', 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        height: '100%',
-        fontSize: '1.5rem'
-      }}>
-        {error}
-      </div>
-    );
-  }
   
   return (
     <motion.div 
@@ -149,8 +83,8 @@ export const VolumeMetrics: React.FC<VolumeMetricsProps> = ({
       <motion.div variants={itemVariants} className="volume-primary">
         <div className="time-period">24 HOUR</div>
         <div className="mega-value-container">
-          <div className="mega-value-base">{metrics.volume24h}</div>
-          <div className="mega-value-shine">{metrics.volume24h}</div>
+          <div className="mega-value-base">{volume24h}</div>
+          <div className="mega-value-shine">{volume24h}</div>
         </div>
       </motion.div>
       
@@ -168,13 +102,13 @@ export const VolumeMetrics: React.FC<VolumeMetricsProps> = ({
         {/* 7D Volume */}
         <div className="secondary-metric">
           <div className="time-period small">7 DAY</div>
-          <div className="secondary-value">{metrics.volume7d}</div>
+          <div className="secondary-value">{volume7d}</div>
         </div>
         
         {/* 30D Volume */}
         <div className="secondary-metric">
           <div className="time-period small">30 DAY</div>
-          <div className="secondary-value">{metrics.volume30d}</div>
+          <div className="secondary-value">{volume30d}</div>
         </div>
       </motion.div>
       

@@ -1,58 +1,26 @@
 /**
  * TVLMetric.tsx
  * 
- * A component for displaying Total Value Locked (TVL) metric
- * fetching real-time data from the dashboard metrics API.
+ * A component for displaying Total Value Locked (TVL) metric.
+ * Updated to use a static value for display.
  */
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
 interface TVLMetricProps {
   title?: string;
   subtitle?: string;
+  tvlValue?: string; // Added optional prop for static value
 }
 
 export const TVLMetric: React.FC<TVLMetricProps> = ({
   title = "Total Value of Liquidity",
-  subtitle = "TVL"
+  subtitle = "TVL",
+  tvlValue = "$50M+" // Set default static value
 }) => {
-  // State for TVL data
-  const [tvlValue, setTvlValue] = useState("$0");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  
-  // Fetch metrics on component mount
-  useEffect(() => {
-    const fetchTVL = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/dashboard-metrics');
-        
-        if (!response.ok) {
-          throw new Error(`Failed to fetch metrics: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        setTvlValue(data.metrics['total-basket-reserve'] || "$0");
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching TVL:', err);
-        setError('Failed to load TVL data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTVL();
-    
-    // Optional: Set up polling to refresh data periodically
-    const intervalId = setInterval(fetchTVL, 5 * 60 * 1000); // Refresh every 5 minutes
-    
-    return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
 
   // Animation variants
   const containerVariants = {
@@ -71,38 +39,6 @@ export const TVLMetric: React.FC<TVLMetricProps> = ({
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
   };
-  
-  // Show loading state
-  if (loading && tvlValue === "$0") {
-    return (
-      <div style={{ 
-        color: 'white', 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        height: '100%',
-        fontSize: '1.5rem'
-      }}>
-        Loading TVL data...
-      </div>
-    );
-  }
-
-  // Show error state
-  if (error) {
-    return (
-      <div style={{ 
-        color: 'white', 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        height: '100%',
-        fontSize: '1.5rem'
-      }}>
-        {error}
-      </div>
-    );
-  }
   
   return (
     <motion.div 

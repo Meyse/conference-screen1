@@ -46,16 +46,19 @@ export const DashboardContainer: React.FC = () => {
     // Switch based on screen value to determine which component to render
     switch (currentScreen.value) {
       case 'tvl-metric':
+        // Use default static value from component
         return <TVLMetric key={`screen-${currentIndex}-tvl`} />;
       
       case 'all-time-volume':
         return <AllTimeVolumeMetric key={`screen-${currentIndex}-all-time-volume`} {...allTimeVolumeMetrics} />;
       
       case 'bridged-assets':
-        return <BridgedAssets key={`screen-${currentIndex}-bridged-assets`} title={currentScreen.title} />;
+        // Use default static values from component
+        return <BridgedAssets key={`screen-${currentIndex}-bridged-assets`} />;
       
       case 'volume-metrics':
-        return <VolumeMetrics key={`screen-${currentIndex}-volume-metrics`} {...volumeMetrics} />;
+        // Use default static values from component
+        return <VolumeMetrics key={`screen-${currentIndex}-volume-metrics`} />;
         
       case 'chains-ecosystem':
         return <ChainsMetric key={`screen-${currentIndex}-chains-ecosystem`} {...chainsMetrics} />;

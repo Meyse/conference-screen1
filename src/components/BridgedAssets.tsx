@@ -2,86 +2,27 @@
  * BridgedAssets.tsx
  * 
  * A component for displaying metrics about assets bridged onto the network,
- * featuring Bitcoin and Ethereum with eye-catching animations and real-time data.
+ * featuring Bitcoin and Ethereum with eye-catching animations.
+ * Updated to use static values.
  */
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 interface BridgedAssetsProps {
-  title: string;
-}
-
-interface BridgedAssetsData {
-  btc: string;
-  eth: string;
-  updated_at: string;
+  title?: string;
+  btcValue?: string; // Added optional prop for static BTC value
+  ethValue?: string; // Added optional prop for static ETH value
 }
 
 export const BridgedAssets: React.FC<BridgedAssetsProps> = ({
-  title = "Assets Bridged to Network"
+  title = "Assets Bridged to Network",
+  btcValue = "166", // Set default static BTC value
+  ethValue = "3,898" // Set default static ETH value
 }) => {
-  const [data, setData] = useState<BridgedAssetsData>({
-    btc: "0",
-    eth: "0",
-    updated_at: ""
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [debugInfo, setDebugInfo] = useState<Record<string, unknown> | null>(null);
-
-  // Fetch data from our API
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log('Fetching bridged assets data...');
-        setLoading(true);
-        const response = await fetch('/api/bridged-assets');
-        
-        const responseText = await response.text();
-        console.log('Raw API response:', responseText);
-        
-        let result;
-        try {
-          result = JSON.parse(responseText);
-        } catch (e) {
-          throw new Error(`Failed to parse response: ${(e as Error).message}`);
-        }
-        
-        if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.status}`);
-        }
-        
-        console.log('Parsed API response:', result);
-        setDebugInfo(result);
-        
-        if (result.btc && result.eth) {
-          setData(result);
-        } else if (result.error) {
-          throw new Error(`API error: ${result.error}`);
-        } else {
-          throw new Error('API response missing expected data structure');
-        }
-        
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching bridged assets data:', err);
-        setError(`Failed to load assets data: ${(err as Error).message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-    
-    // Set up polling to refresh data every 5 minutes
-    const intervalId = setInterval(fetchData, 5 * 60 * 1000);
-    
-    return () => clearInterval(intervalId);
-  }, []);
 
   // Animation variants
   const containerVariants = {
@@ -101,52 +42,6 @@ export const BridgedAssets: React.FC<BridgedAssetsProps> = ({
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
   };
 
-  // Show loading state
-  if (loading && data.btc === "0" && data.eth === "0") {
-    return (
-      <div style={{ 
-        color: 'white', 
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center', 
-        alignItems: 'center',
-        height: '100%',
-        fontSize: '1.5rem'
-      }}>
-        <div>Loading assets data...</div>
-        {debugInfo && (
-          <pre style={{ fontSize: '0.8rem', marginTop: '1rem', maxWidth: '80%', overflow: 'auto' }}>
-            {JSON.stringify(debugInfo, null, 2)}
-          </pre>
-        )}
-      </div>
-    );
-  }
-
-  // Show error state
-  if (error) {
-    return (
-      <div style={{ 
-        color: 'white', 
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center', 
-        alignItems: 'center',
-        height: '100%',
-        textAlign: 'center'
-      }}>
-        <div style={{ fontSize: '1.5rem', color: '#EF4444', marginBottom: '1rem' }}>
-          {error}
-        </div>
-        {debugInfo && (
-          <pre style={{ fontSize: '0.8rem', maxWidth: '80%', overflow: 'auto' }}>
-            {JSON.stringify(debugInfo, null, 2)}
-          </pre>
-        )}
-      </div>
-    );
-  }
-  
   return (
     <motion.div 
       variants={containerVariants}
@@ -196,8 +91,8 @@ export const BridgedAssets: React.FC<BridgedAssetsProps> = ({
             />
           </div>
           <div className="asset-wrapper">
-            <div className="asset-value-base">{data.btc}</div>
-            <div className="asset-value-shine">{data.btc}</div>
+            <div className="asset-value-base">{btcValue}</div>
+            <div className="asset-value-shine">{btcValue}</div>
           </div>
           <div className="asset-name">Bitcoin (tBTC)</div>
         </motion.div>
@@ -217,8 +112,8 @@ export const BridgedAssets: React.FC<BridgedAssetsProps> = ({
             />
           </div>
           <div className="asset-wrapper">
-            <div className="asset-value-base">{data.eth}</div>
-            <div className="asset-value-shine">{data.eth}</div>
+            <div className="asset-value-base">{ethValue}</div>
+            <div className="asset-value-shine">{ethValue}</div>
           </div>
           <div className="asset-name">Ethereum</div>
         </motion.div>
