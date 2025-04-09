@@ -20,7 +20,7 @@ interface VolumeMetricsProps {
 
 export const VolumeMetrics: React.FC<VolumeMetricsProps> = ({
   title = "Live DeFi Volume",
-  volume24h = "$1.1M",
+  volume24h = "$1.3M",
   volume7d = "$9.5M",
   volume30d = "$34.3M"
 }) => {

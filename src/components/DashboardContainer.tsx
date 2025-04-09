@@ -19,7 +19,6 @@ import { TVLMetric } from './TVLMetric';
 import { AllTimeVolumeMetric } from './AllTimeVolumeMetric';
 import { PromoScreen } from './PromoScreen';
 import { 
-  volumeMetrics, 
   chainsMetrics,
   allTimeVolumeMetrics,
   promoScreenData
